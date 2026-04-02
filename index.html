@@ -646,7 +646,7 @@ async function guardar(){
   data.minuta=mn;
   if((mn.objetivo||mn.participantes.length||mn.compromisos.length)&&data.estado==='PENDIENTE'){data.estado='CON MINUTA';var estEl=document.getElementById('ed-est');if(estEl)estEl.value='CON MINUTA';}
   fichas[selId]=data;saveLocal();closeFicha();renderCal();
-  if(getUrl()){setSS('spin','Guardando…');try{var resp=await fetch(getUrl(),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'setFicha',id:selId,data:data})});if(!resp.ok)throw new Error('HTTP '+resp.status);var jr=await resp.json();if(jr.error)throw new Error(jr.error);await syncAll();setSS('ok','Guardado ✓ compartido');}catch(ex){setSS('err','Solo local: '+ex.message);}}
+  if(getUrl()){setSS('spin','Guardando…');try{var fd=new URLSearchParams();fd.set('action','setFicha');fd.set('id',selId);fd.set('data',JSON.stringify(data));var resp=await fetch(getUrl(),{method:'POST',body:fd});if(!resp.ok)throw new Error('HTTP '+resp.status);var jr=await resp.json();if(jr.error)throw new Error(jr.error);await syncAll();setSS('ok','Guardado ✓ compartido');}catch(ex){setSS('err','Solo local: '+ex.message);}}
 }
 
 function switchTab(el){
